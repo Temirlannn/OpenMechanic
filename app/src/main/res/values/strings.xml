@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">OpenMechanic</string>
+    <string name="loading">Загрузка</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_email">Not a valid email</string>
+    <string name="invalid_name">Name must contain only letters between A-Z</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="no_internet">No Internet</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="email_desc">Этот адрес эл.почты будет использоваться для входа в аккаунт Mechanic</string>
+    <string name="name">Имя</string>
+    <string name="email">email</string>
+    <string name="password">Пороль</string>
+    <string name="submit">Подтверждение пороля</string>
+    <string name="proceed">Далее</string>
+    <string name="has_an_account">уже есть аккаунт?</string>
+    <string name="login">вход</string>
+</resources>
