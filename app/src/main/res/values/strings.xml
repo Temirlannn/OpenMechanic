@@ -6,10 +6,20 @@
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
+    <string name="enter_code">Введите код подтверждения</string>
+    <string name="too_many_requests">Too many requests error!</string>
+    <string name="send_sms_again_quest">Отправить код повторно (%s)</string>
+    <string name="send_sms_again">Отправить код повторно</string>
+    <string name="enter_phone">Введите номер телефона</string>
+    <string name="incorrect_number">Не верно указали номер?</string>
+    <string name="invalid_credentials">Invalid credentials error!</string>
+    <string name="sms_quota_has_been_exceeded">квота SMS для проекта превышена</string>
+    <string name="invalid_request">Отправить код повторно</string>
     <string name="invalid_email">Not a valid email</string>
     <string name="invalid_name">Name must contain only letters between A-Z</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="incorrect_format">Формат телефона указан неправильно</string>
     <string name="no_internet">No Internet</string>
     <string name="sign_up">Зарегистрироваться</string>
     <string name="email_desc">Этот адрес эл.почты будет использоваться для входа в аккаунт Mechanic</string>
@@ -20,4 +30,6 @@
     <string name="proceed">Далее</string>
     <string name="has_an_account">уже есть аккаунт?</string>
     <string name="login">вход</string>
+    <string name="kg_country_phone_code">+996</string>
+    <string name="enter_account">Войти в аккаунт</string>
 </resources>

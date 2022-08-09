@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "25611246637",
+    "project_id": "openmechanic-a3eef",
+    "storage_bucket": "openmechanic-a3eef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25611246637:android:a0f1d2afcdf80204052ca4",
+        "android_client_info": {
+          "package_name": "com.it.openmechanic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "25611246637-benjq7ui3igdm15is3a0hjpm061rabvb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqPB8ffbXcJWesvdntI0zjMq01ahDy5Uw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "25611246637-benjq7ui3igdm15is3a0hjpm061rabvb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

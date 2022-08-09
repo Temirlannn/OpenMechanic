@@ -11,10 +11,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.textfield.TextInputEditText
+import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
 
 private var toast: Toast? = null
 
@@ -28,6 +30,15 @@ fun Fragment.toast(text: String) {
 
 fun Activity.toast(text: String) {
     toast(this, text)
+}
+
+fun String.phoneNumberFormat(region: String = "KG", util: PhoneNumberUtil): String {
+    return util.format(util.parse(this, region), PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
+}
+
+fun String.isPhoneNumberValid(region: String = "KG", util: PhoneNumberUtil): Boolean {
+    val phoneNumberFormatter = util.parse(this, region)
+    return util.isValidNumber(phoneNumberFormatter)
 }
 
 
@@ -116,7 +127,7 @@ fun Context.enableNotifications() {
 
 
 
-fun TextInputEditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
+fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         }
