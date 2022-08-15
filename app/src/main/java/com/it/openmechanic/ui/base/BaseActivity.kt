@@ -11,7 +11,10 @@ import com.it.openmechanic.R
 import com.it.openmechanic.utils.ConnectionStateMonitor
 import com.it.openmechanic.utils.SHARED_PREFERENCES_NAME
 import com.it.openmechanic.utils.isUIAvailable
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 abstract class BaseActivity<VB : ViewBinding>(val bindingFactory: (LayoutInflater) -> VB) :
@@ -61,15 +64,22 @@ abstract class BaseActivity<VB : ViewBinding>(val bindingFactory: (LayoutInflate
         TODO("Not yet implemented")
     }
 
-    fun setProgressVisible(visible: Boolean) {
+    fun showProgressBar() {
+        launch {
+            if (!isUIAvailable()) {
+                return@launch
+            }
+            pd.show()
+        }
+    }
+
+    fun hideProgressBar() {
         launch {
             if (!isUIAvailable()) {
                 return@launch
             }
             try {
-                if (visible && !pd.isShowing) {
-                    pd.show()
-                } else if (!visible && pd.isShowing) {
+                if (pd.isShowing) {
                     pd.dismiss()
                 }
             } catch (e: Exception) {

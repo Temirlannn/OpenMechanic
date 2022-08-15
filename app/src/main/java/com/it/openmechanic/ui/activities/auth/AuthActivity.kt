@@ -13,6 +13,7 @@ import com.it.openmechanic.utils.*
 import com.santalu.maskara.Mask
 import com.santalu.maskara.MaskChangedListener
 import com.santalu.maskara.MaskStyle
+import com.it.openmechanic.data.model.Response.*
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -54,44 +55,50 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::infl
         }
     }
 
-    override fun bindViewModel() = with(binding) {
+    override fun bindViewModel() {
 
-        authVM.codeSendObservable.observe(this@AuthActivity) {
-            login.hide()
-            smsCodeGroup.show()
-            sendSmsAgain.isEnabled = false
-            enterPhoneTittle.text = getString(R.string.enter_code)
+        authVM.codeSendObservable.observe(this) {
+            with(binding) {
+                login.hide()
+                smsCodeGroup.show()
+                sendSmsAgain.isEnabled = false
+                enterPhoneTittle.text = getString(R.string.enter_code)
+            }
         }
 
-        authVM.smsErrorObservable.observe(this@AuthActivity) {
+        authVM.smsErrorObservable.observe(this) {
             it?.let {
                 toast(it)
             }
         }
 
-        authVM.progress.observe(this@AuthActivity) {
-            setProgressVisible(it)
-        }
-
-        sendSmsAgain.setOnClickListener {
-            val phone = getPhone()
-            if (phone.isNotEmpty()) {
-                authVM.resendVerificationCode(phone, this@AuthActivity)
+        authVM.loginResponse.observe(this) {
+            when (it) {
+                is Success -> {
+                    if (it.data) {
+                        startActivity(MainActivity.newInstance(applicationContext))
+                    } else {
+                        startActivity(NameInputActivity.newInstance(this))
+                    }
+                }
+                is Error -> toast(it.message)
+                else -> Unit
             }
         }
 
-        authVM.proceedRegistration.observe(this@AuthActivity) {
-            startActivity(
-                NameInputActivity.newInstance(this@AuthActivity).putExtra("id", it.id)
-            )
+        binding.sendSmsAgain.setOnClickListener {
+            val phone = getPhone()
+            if (phone.isNotEmpty()) {
+                authVM.resendVerificationCode(phone, this)
+            }
         }
 
-        authVM.secondsObservable.observe(this@AuthActivity) {
-            sendSmsAgain.text = String.format(getString(R.string.send_sms_again_quest), it)
+        authVM.secondsObservable.observe(this) {
+            binding.sendSmsAgain.text = String.format(getString(R.string.send_sms_again_quest), it)
         }
 
-        authVM.resendEnabledObservable.observe(this@AuthActivity) {
-            with(sendSmsAgain) {
+        authVM.resendEnabledObservable.observe(this) {
+            with(binding.sendSmsAgain) {
                 if (it) {
                     isEnabled = true
                     setTextColor(ContextCompat.getColor(context, R.color.black))
@@ -101,14 +108,6 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::infl
                     setTextColor(ContextCompat.getColor(context, R.color.grey_opacity))
                     text = getString(R.string.send_sms_again_quest)
                 }
-            }
-        }
-
-        authVM.isSuccessLogin.observe(this@AuthActivity) { success ->
-            val (isSuccess, errorMessage) = success
-            when {
-                isSuccess -> startActivity(MainActivity.newInstance(applicationContext))
-                errorMessage != null -> toast(errorMessage)
             }
         }
     }

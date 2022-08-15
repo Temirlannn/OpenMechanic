@@ -1,11 +1,15 @@
 package com.it.openmechanic.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Build
+import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
@@ -69,6 +73,7 @@ fun Fragment.hideKeyboard() {
     }
     imm.hideSoftInputFromWindow(view.windowToken, 0)
 }
+
 /**
  * View extensions
  */
@@ -125,7 +130,28 @@ fun Context.enableNotifications() {
     }.also { startActivity(it) }
 }
 
-
+@SuppressLint("Range")
+fun Uri.getFileName(context: Context): String? {
+    var result: String? = null
+    if (scheme.equals("content")) {
+        val cursorSet: Cursor? = context.contentResolver?.query(this, null, null, null, null)
+        cursorSet.use { cursor ->
+            if (cursor != null && cursor.moveToFirst()) {
+                result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+            }
+        }
+    }
+    if (result == null) {
+        result = path
+        val cut = result?.lastIndexOf('/')
+        if (cut != -1) {
+            if (cut != null) {
+                result = result?.substring(cut + 1)
+            }
+        }
+    }
+    return result
+}
 
 fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {

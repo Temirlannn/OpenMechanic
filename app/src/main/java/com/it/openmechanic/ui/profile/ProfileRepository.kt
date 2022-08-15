@@ -1,59 +1,18 @@
 package com.it.openmechanic.ui.profile
 
-import android.util.Log
-import com.google.firebase.firestore.FirebaseFirestore
-import com.it.openmechanic.data.Failure
-import com.it.openmechanic.data.Result
-import com.it.openmechanic.data.Success
-import com.it.openmechanic.data.model.User
-import com.it.openmechanic.enums.CollectionType
-import kotlinx.coroutines.tasks.await
+import com.it.openmechanic.data.model.Profile
+import com.it.openmechanic.data.model.Response
+import kotlinx.coroutines.flow.Flow
 
-class ProfileRepository(private val fireStore: FirebaseFirestore) {
-    suspend fun insertUser(user: User): Result<Boolean, Exception> {
-        return try {
-            Log.e("user: ", user.toString())
-            fireStore
-                .collection(CollectionType.USERS.code)
-                .document(user.id.toString())
-                .set(user)
-                .await()
-            Success(true)
-        } catch (e: Exception) {
-            Log.e("failed", e.message.toString())
-            Failure(e)
-        }
-    }
+interface ProfileRepository {
 
-    suspend fun getUser(id: String): Result<User, Exception> {
-        return try {
-            Log.e("id", id)
-            val user =
-                fireStore
-                    .collection(CollectionType.USERS.code)
-                    .document(id)
-                    .get()
-                    .await()
-                    .toObject(User::class.java)
+    suspend fun addProfile(profile: Profile): Flow<Response<Void?>>
 
-            if (user != null) Success(user)
-            else Failure(Exception("No data"))
+    suspend fun getProfile(id: String): Flow<Response<Profile>>
 
-        } catch (e: Exception) {
-            Failure(e)
-        }
-    }
+    suspend fun isProfileExists(id: String): Flow<Response<Boolean>>
 
-    suspend fun isUserExists(id: String): Result<Boolean, Exception> {
-        return try {
-            val result = fireStore.collection(CollectionType.USERS.code)
-                .document(id)
-                .get().await()
-            if (result.exists()) Success(true)
-            else Success(false)
+    fun getLocalProfile(id: String): Flow<Profile>
 
-        } catch (e: Exception) {
-            Failure(e)
-        }
-    }
+    suspend fun addLocalProfile(profile: Profile): Flow<Response<Long>>
 }

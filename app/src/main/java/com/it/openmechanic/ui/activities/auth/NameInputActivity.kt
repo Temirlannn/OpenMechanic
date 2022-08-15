@@ -2,7 +2,8 @@ package com.it.openmechanic.ui.activities.auth
 
 import android.content.Context
 import android.content.Intent
-import com.it.openmechanic.data.model.User
+import com.it.openmechanic.data.model.Profile
+import com.it.openmechanic.data.model.Response.*
 import com.it.openmechanic.databinding.ActivityNameInputBinding
 import com.it.openmechanic.ui.activities.main.MainActivity
 import com.it.openmechanic.ui.base.BaseActivity
@@ -22,7 +23,6 @@ class NameInputActivity :
     }
 
     override fun setupView() = with(binding) {
-        val id = intent.getStringExtra("id")
 
         nameInput.afterTextChanged {
             btnAuth.isEnabled = it.length > 2
@@ -45,20 +45,25 @@ class NameInputActivity :
 
             val fullName = String.format("%s", nameInput.text?.toString() ?: "")
 
-            val user = User(id = id, userName = fullName)
-            profileVM.insertUser(user)
+            val profile = Profile(userName = fullName)
+            profileVM.addProfile(profile)
         }
     }
 
-    override fun bindViewModel() = with(binding) {
-        profileVM.userInsertObservable.observe(this@NameInputActivity) {
-            if (it) {
-                startActivity(MainActivity.newInstance(this@NameInputActivity))
-            }
-        }
+    override fun bindViewModel() {
 
-        profileVM.errorObservable.observe(this@NameInputActivity) {
-            toast(it)
+        profileVM.addProfileResponse.observe(this) {
+            when (it) {
+                is Success -> {
+                    hideProgressBar()
+                    startActivity(MainActivity.newInstance(this))
+                }
+                is Error -> {
+                    hideProgressBar()
+                    toast(it.message)
+                }
+                is Loading -> showProgressBar()
+            }
         }
     }
 
